@@ -1,11 +1,11 @@
 # 16S-rRNA-Metabarcoding-Analysis
-Tutorial for the analysis of 16S rRNA metabarcoding sequences using Illumina pairend reads. This tutorial is based on the MiSeq SOP pipeline (https://mothur.org/wiki/miseq_sop/ Schloss et al., 2013.)
+Tutorial for the analysis of 16S rRNA metabarcoding sequences using Illumina paired end reads. This tutorial is based on the MiSeq SOP pipeline (https://mothur.org/wiki/miseq_sop/ Schloss et al., 2013.)
 
 ## Introduction
 
-Sequences were generated using data from a hydrocarbon bioremediation project. Two treatments were selected for this tutorial, a bioaugmentation with *Acinetobacter, Pseudomonas* and *Rhodococcus* strains, and a control. 
-Both treatments were inoculated with a high concentration of diesel before the beggining of the experiment, and were periodically turned over for aereation. Temperature, pH, total pretroleum hydrocarbons (TPH) and other physico-chemical parameters were monitored. 
-The fundamental question of the experiment was observe the bacterial communities changes accross the experiment, and evaluate how they change while the TPH concentration decreases.
+Sequences were generated using data from a hydrocarbon bioremediation project. Two treatments were selected for this tutorial, bioaugmentation with *Acinetobacter, Pseudomonas* and *Rhodococcus* strains, and a control. 
+Both treatments were inoculated with a high concentration of diesel before the begining of the experiment and were periodically turned over for aeration. Temperature, pH, total petroleum hydrocarbons (TPH) and other physicochemical parameters were monitored. 
+The fundamental question of the experiment was to observe the bacterial communities' changes across the experiment, and evaluate how they change while the TPH concentration decreases.
 
 # Getting Started
 
@@ -23,7 +23,7 @@ Then we will download the data using wget
 ```
 wget https://zenodo.org/record/6828213/files/Demultiplexed.tar.xz
 ```
-Finally we will extract the downloaded file
+Finally, we will extract the downloaded file
 
 ```
 tar -xf Demultiplexed.tar.xz
@@ -38,17 +38,17 @@ BA3T01-R2.fastq  BA3T07-R2.fastq  LF2T11-R2.fastq  LF3T03-R2.fastq
 BA3T03-R1.fastq  BA3T11-R1.fastq  LF3T01-R1.fastq  LF3T07-R1.fastq
 BA3T03-R2.fastq  BA3T11-R2.fastq  LF3T01-R2.fastq  LF3T07-R2.fastq
 ```
-Sixteen files are part of this tutorial. BA stands for Bioaugmentation and LF to landfarming, which was the control treatment. Then Txx indicate the time of sampling. T01 is the initial point, T03, T07 and T11 are at the 2nd, 6th and 10th week respectively. The after the - appears a R1 or R2, which correspond to the forward and reverse reads of a sample
+Sixteen files are part of this tutorial. BA stands for Bioaugmentation and LF for landfarming, which was the control treatment. Then Txx indicates the time of sampling. T01 is the initial point, T03, T07 and T11 are at the 2nd, 6th and 10th week respectively. The after the - appears an R1 or R2, which correspond to the forward and reverse reads of a sample
 
 ## Assemble Forward and Reverse Reads
 
-Now, let's get into mothur, just typing mothur on your terminal. Then we can use the make.file command to make a file which indicates the forward and reverse sequence of a sample. This file is used latter to assemble both sequences
+Now, let's get into mothur, just typing mothur on your terminal. Then we can use the make.file command to make a file which indicates the forward and reverse sequence of a sample. This file is used later to assemble both sequences
 ```
 mothur
 
 make.file(inputdir=Demultiplexed/, type=fastq, prefix=tutorial)
 ```
-In this command, in the inputdir, we selected the folder with the raw files; type indicates the file extension; and the prefix is the name that we want assign to all of our subsequent files.
+In this command, the inputdir, we selected the folder with the raw files, the type indicates the file extension, and the prefix is the name that we want to assign to all of our subsequent files.
 
 Now, let's inspect the output file in a different terminal window, so we don't have to quit Mothur yet. 
 
@@ -64,7 +64,7 @@ Group_5 LF3T03-R1.fastq LF3T03-R2.fastq
 Group_6 LF3T07-R1.fastq LF3T07-R2.fastq 
 Group_7 LF3T11-R1.fastq LF3T11-R2.fastq 
 ```
-So, Mothur created a file with the eight samples and the raw read associated to each. Then, if you just press 'q', you'll quit the less command.
+So, Mothur created a file with the eight samples and the raw read associated with each. Then, if you just press 'q', you'll quit the less command.
 Now we can use that file to assemble the reads.
 
 ```
@@ -90,7 +90,7 @@ Contigs/tutorial.scrap.contigs.fasta
 Contigs/tutorial.contigs_report
 Contigs/tutorial.contigs.count_table
 ```
-This command assembles the forward and reverse sequences and generate an individual fasta file with quality indexes in it. Additionally, generates a count-table and a report file which gives information of the group identitity, and information about the assembly of each read respectively. 
+This command assembles the forward and reverse sequences and generates an individual fasta file with quality indexes in it. Additionally, generates a count-table and a report file which gives information of the group identitity and information about the assembly of each read respectively. 
 
 We can inspect our data using summary.seqs
 
@@ -174,13 +174,31 @@ Mean:	1	252	252	0	4
 # of unique seqs:	114887
 total # of seqs:	466395
 ```
-```
-```
+So now instead of working with 466395 sequences, we have to work only with 114887
+
+## Make a Customized Database for the 16S rRNA V4 region
+To eventually know the taxonomy of your sequences, we have to use a reference database. The SILVA database is the gold standard for it.
+We will create a new folder to download the SILVA database and then extract the compressed file
 
 ```
+mkdir Silva_DB
+cd Silva_DB
+wget https://mothur.s3.us-east-2.amazonaws.com/wiki/silva.nr_v138_1.tgz
+tar -xzvf silva.nr_v138_1.tgz
 ```
+To keep the alignments from position 11890 to 25323 (V4 region), we will go back to the Mothur terminal and use the pcr.seqs command. Also. to delete the trail dots in each alignment, we will set keepdots as false
 
 ```
+pcr.seqs(fasta=Silva_DB/silva.nr_v138_1.align , start=11890, end=25323, keepdots=F)
+
+Output File Names: 
+Contigs/silva.nr_v138_1.pcr.align
+```
+
+Let's rename this file
+
+```
+rename.file(input=Contigs/silva.nr_v138_1.pcr.align, new=silva.v4.fasta)
 ```
 
 ```
