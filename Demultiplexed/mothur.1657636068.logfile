@@ -1,0 +1,44 @@
+Linux version
+
+Using ReadLine,Boost,HDF5,GSL
+mothur v.1.46.1
+Last updated: 9/01/21
+by
+Patrick D. Schloss
+
+Department of Microbiology & Immunology
+
+University of Michigan
+http://www.mothur.org
+
+When using, please cite:
+Schloss, P.D., et al., Introducing mothur: Open-source, platform-independent, community-supported software for describing and comparing microbial communities. Appl Environ Microbiol, 2009. 75(23):7537-41.
+
+Distributed under the GNU General Public License
+
+Type 'help()' for information on the commands that are available
+
+For questions and analysis support, please visit our forum at https://forum.mothur.org
+
+Type 'quit()' to exit program
+
+[NOTE]: Setting random seed to 19760620.
+
+Interactive Mode
+
+
+
+mothur > make.file(inputdir=Raw_data/, type=fastq, prefix=tutorial)
+Setting input directory to: Raw_data/
+
+[WARNNG]: mothur found unpaired files in your input directory. Outputting list of filenames to Raw_data/tutorial.single.files for your review.
+
+
+Output File Names: 
+Raw_data/tutorial.single.files
+Raw_data/tutorial.files
+
+
+mothur > quit()
+Logfile : mothur.1657636068.logfile
+
