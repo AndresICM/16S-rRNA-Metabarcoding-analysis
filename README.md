@@ -200,6 +200,96 @@ Let's rename this file
 ```
 rename.file(input=Contigs/silva.nr_v138_1.pcr.align, new=silva.v4.fasta)
 ```
+## Working with Improved Sequences and a Customized Database
+
+Now that we have our improved reads and a customized database, we can align sequences to the reference. This process takes a few minutes
+
+```
+align.seqs(fasta=Contigs/tutorial.trim.contigs.good.unique.fasta, reference=Contigs/silva.v4.fasta, processors=1, flip=t)
+```
+We can inspect the alignment
+```
+summary.seqs(fasta=Contigs/tutorial.trim.contigs.good.unique.align, count=Contigs/tutorial.trim.contigs.good.count_table, processors=4)
+
+		Start	End	NBases	Ambigs	Polymer	NumSeqs
+Minimum:	1	1	1	0	1	1
+2.5%-tile:	1973	11555	253	0	4	11660
+25%-tile:	1973	11555	253	0	4	116599
+Median: 	1973	11555	253	0	4	233198
+75%-tile:	1973	11555	253	0	5	349797
+97.5%-tile:	1973	11555	253	0	6	454736
+Maximum:	13427	13430	253	0	8	466395
+Mean:	1973	11554	252	0	4
+# of unique seqs:	114887
+total # of seqs:	466395
+```
+We can observe that most of our sequences align between the 1973 and 11555 possition of the reference. Now we can remove the alignments that does not overlap in this region
+
+```
+screen.seqs(fasta=Contigs/tutorial.trim.contigs.good.unique.align, count=Contigs/tutorial.trim.contigs.good.count_table, start=1973, end=11555, processors=4)
+```
+
+```
+summary.seqs(fasta=Contigs/tutorial.trim.contigs.good.unique.good.align, count=Contigs/tutorial.trim.contigs.good.good.count_table)
+
+
+			Start	End	NBases	Ambigs	Polymer	NumSeqs
+Minimum:	1970	11555	250	0	3	1
+2.5%-tile:	1973	11555	253	0	4	11646
+25%-tile:	1973	11555	253	0	4	116459
+Median: 	1973	11555	253	0	4	232917
+75%-tile:	1973	11555	253	0	5	349375
+97.5%-tile:	1973	11555	253	0	6	454188
+Maximum:	1973	13430	253	0	8	465833
+Mean:	1972	11555	252	0	4
+# of unique seqs:	114514
+```
+We can see that 562 sequences were removed. Now we can delete some gap characters from our file, to reduce its volume 
+
+```
+filter.seqs(fasta=Contigs/tutorial.trim.contigs.good.unique.good.align, vertical=T, trump=.)
+
+Length of filtered alignment: 623
+Number of columns removed: 12811
+Length of the original alignment: 13434
+Number of sequences used to construct filter: 114514
+```
+So we went from an alignment file with 13434 columns to one of 623. 
+Now, we might still have some redundant sequences, therefore we will re run the unique.seqs command
+
+```
+unique.seqs(fasta=Contigs/tutorial.trim.contigs.good.unique.good.filter.fasta, count=Contigs/tutorial.trim.contigs.good.good.count_table)
+```
+
+
+
+```
+```
+
+```
+```
+
+```
+```
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+```
+```
+
+```
+```
+
+```
+```
 
 ```
 ```
