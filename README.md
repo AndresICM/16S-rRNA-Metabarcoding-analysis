@@ -38,6 +38,29 @@ BA3T01-R2.fastq  BA3T07-R2.fastq  LF2T11-R2.fastq  LF3T03-R2.fastq
 BA3T03-R1.fastq  BA3T11-R1.fastq  LF3T01-R1.fastq  LF3T07-R1.fastq
 BA3T03-R2.fastq  BA3T11-R2.fastq  LF3T01-R2.fastq  LF3T07-R2.fastq
 ```
-Sixteen files are part of this tutorial. BA stands for Bioaugmentation and LF to landfarming, which was the control treatment. Then Txx indicate the time of sampling. T01 is the initial point, T03, T07 and T11 are at the 2nd, 6th and 10th week respectively. The after the - appears a R1 or R2, which correspond to the forward and reverse reads of a sample. 
+Sixteen files are part of this tutorial. BA stands for Bioaugmentation and LF to landfarming, which was the control treatment. Then Txx indicate the time of sampling. T01 is the initial point, T03, T07 and T11 are at the 2nd, 6th and 10th week respectively. The after the - appears a R1 or R2, which correspond to the forward and reverse reads of a sample
 
 
+Now, let's get into mothur, just typing mothur on your terminal. Then we can use the make.file command to make a file which indicates the forward and reverse sequence of a sample. This file is used latter to assemble both sequences
+```
+mothur
+
+make.file(inputdir=Demultiplexed/, type=fastq, prefix=tutorial)
+```
+In this command, in the inputdir, we selected the folder with the raw files; type indicates the file extension; and the prefix is the name that we want assign to all of our subsequent files.
+
+Now, let's inspect the output file in a different terminal window, so we don't have to quit Mothur yet. 
+
+```
+less Demultiplexed/tutorial.files
+
+Group_0 BA3T01-R1.fastq BA3T01-R2.fastq 
+Group_1 BA3T03-R1.fastq BA3T03-R2.fastq 
+Group_2 BA3T07-R1.fastq BA3T07-R2.fastq 
+Group_3 BA3T11-R1.fastq BA3T11-R2.fastq 
+Group_4 LF3T01-R1.fastq LF3T01-R2.fastq 
+Group_5 LF3T03-R1.fastq LF3T03-R2.fastq 
+Group_6 LF3T07-R1.fastq LF3T07-R2.fastq 
+Group_7 LF3T11-R1.fastq LF3T11-R2.fastq 
+```
+So, Mothur created a file with the eight samples and the raw read associated to each. Then, if you just press 'q', you'll quit the less command.
