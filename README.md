@@ -40,6 +40,7 @@ BA3T03-R2.fastq  BA3T11-R2.fastq  LF3T01-R2.fastq  LF3T07-R2.fastq
 ```
 Sixteen files are part of this tutorial. BA stands for Bioaugmentation and LF to landfarming, which was the control treatment. Then Txx indicate the time of sampling. T01 is the initial point, T03, T07 and T11 are at the 2nd, 6th and 10th week respectively. The after the - appears a R1 or R2, which correspond to the forward and reverse reads of a sample
 
+## Assemble Forward and Reverse Reads
 
 Now, let's get into mothur, just typing mothur on your terminal. Then we can use the make.file command to make a file which indicates the forward and reverse sequence of a sample. This file is used latter to assemble both sequences
 ```
@@ -64,3 +65,38 @@ Group_6 LF3T07-R1.fastq LF3T07-R2.fastq
 Group_7 LF3T11-R1.fastq LF3T11-R2.fastq 
 ```
 So, Mothur created a file with the eight samples and the raw read associated to each. Then, if you just press 'q', you'll quit the less command.
+Now we can use that file to assemble the reads.
+
+```
+make.contigs(file=Demultiplexed/tutorial.files, processors=4, inputdir=Demultiplexed, outputdir=Contigs)
+
+Group count: 
+Group_0	64716
+Group_1	86371
+Group_2	68128
+Group_3	83251
+Group_4	68419
+Group_5	74009
+Group_6	83255
+Group_7	94209
+
+Total of all groups is 622358
+
+It took 188 secs to process 622358 sequences.
+
+Output File Names: 
+Contigs/tutorial.trim.contigs.fasta
+Contigs/tutorial.scrap.contigs.fasta
+Contigs/tutorial.contigs_report
+Contigs/tutorial.contigs.count_table
+```
+This command assembles the forward and reverse sequences and generate an individual fasta file with quality indexes in it. Additionally, generates a count-table and a report file which gives information of the group identitity of each sequences and a rinformation of the assembly of each read respectively. 
+
+
+
+
+
+## Reduce Sequencing Errors
+
+
+
