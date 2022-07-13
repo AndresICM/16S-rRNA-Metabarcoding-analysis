@@ -7,9 +7,9 @@ Sequences were generated using data from a hydrocarbon bioremediation project. T
 Both treatments were inoculated with a high concentration of diesel before the beggining of the experiment, and were periodically turned over for aereation. Temperature, pH, total pretroleum hydrocarbons (TPH) and other physico-chemical parameters were monitored. 
 The fundamental question of the experiment was observe the bacterial communities changes accross the experiment, and evaluate how they change while the TPH concentration decreases.
 
-##Getting Started
+# Getting Started
 
-##Download Raw Data
+## Download Raw Data
 
 The data is publicly available in Zenodo. To download it we will create first a folder called 16S_tutorial and enter into that folder with cd
 
