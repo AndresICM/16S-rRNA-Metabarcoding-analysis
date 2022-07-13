@@ -26,5 +26,9 @@ wget https://zenodo.org/record/6828213/files/Demultiplexed.tar.xz
 Finally we will extract the downloaded file
 
 ```
-tar -xf
+tar -xf Demultiplexed.tar.xz
 ```
+A folder called Demultiplexed should be created. Let's inspect what's inside
+
+
+
