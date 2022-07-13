@@ -90,13 +90,68 @@ Contigs/tutorial.scrap.contigs.fasta
 Contigs/tutorial.contigs_report
 Contigs/tutorial.contigs.count_table
 ```
-This command assembles the forward and reverse sequences and generate an individual fasta file with quality indexes in it. Additionally, generates a count-table and a report file which gives information of the group identitity of each sequences and a rinformation of the assembly of each read respectively. 
+This command assembles the forward and reverse sequences and generate an individual fasta file with quality indexes in it. Additionally, generates a count-table and a report file which gives information of the group identitity, and information about the assembly of each read respectively. 
 
+We can inspect our data using summary.seqs
+
+```
+summary.seqs(fasta=Contigs/tutorial.trim.contigs.fasta)
+
+Using 4 processors.
+
+		Start	End	NBases	Ambigs	Polymer	NumSeqs
+Minimum:	1	247	247	0	3	1
+2.5%-tile:	1	253	253	0	4	15559
+25%-tile:	1	253	253	0	4	155590
+Median: 	1	253	253	0	4	311180
+75%-tile:	1	253	253	0	5	466769
+97.5%-tile:	1	274	274	11	6	606800
+Maximum:	1	502	502	68	251	622358
+Mean:	1	254	254	1	4
+# of Seqs:	622358
+
+It took 6 secs to summarize 622358 sequences.
+
+Output File Names:
+Contigs/tutorial.trim.contigs.summary
+```
+This tells us that we have 622358  sequences. Most of them are between 247 and 274 bp. Approximately 2.5% of our sequences have some ambiguous bases. Since we sequenced the V4 region of the rRNA 16S, it’s quite unusual to see the same nuvleotide repeted more than 8 times. For that matter, to delete undesired sequences we will use the screen.seqs command.
+
+
+```
+```
+
+```
+```
+
+```
+```
 
 
 
 
 ## Reduce Sequencing Errors
 
+```
+```
 
+```
+```
+
+```
+```
+
+```
+```
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
 
