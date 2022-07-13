@@ -115,33 +115,64 @@ It took 6 secs to summarize 622358 sequences.
 Output File Names:
 Contigs/tutorial.trim.contigs.summary
 ```
-This tells us that we have 622358  sequences. Most of them are between 247 and 274 bp. Approximately 2.5% of our sequences have some ambiguous bases. Since we sequenced the V4 region of the rRNA 16S, it’s quite unusual to see the same nuvleotide repeted more than 8 times. For that matter, to delete undesired sequences we will use the screen.seqs command.
-
-
-```
-```
-
-```
-```
-
-```
-```
-
-
-
+This tells us that we have 622358  sequences. Most of them are between 247 and 274 bp. Approximately 2.5% of our sequences have some ambiguous bases. 
 
 ## Reduce Sequencing Errors
 
+Since we sequenced the V4 region of the rRNA 16S, it’s quite unusual to see nucleotides repeated more than 8 times. So, to remove undesired reads we will use the screen.seqs command
+
 ```
+screen.seqs(fasta=Contigs/tutorial.trim.contigs.fasta, count=Contigs/tutorial.contigs.count_table, maxambig=0, maxlength=253, maxhomop=8, inputdir=Contigs/)
+
+Output File Names:
+Contigs/tutorial.trim.contigs.good.summary
+Contigs/tutorial.trim.contigs.good.fasta
+Contigs/tutorial.trim.contigs.bad.accnos
+Contigs/tutorial.contigs.good.count_table
+```
+Now, we can inspect again our sequences (we'll be inspecting quite often our reads)
+
+```
+summary.seqs(fasta=Contigs/tutorial.trim.contigs.good.fasta, count=Contigs/tutorial.contigs.good.count_table)
+
+
+		Start	End	NBases	Ambigs	Polymer	NumSeqs
+Minimum:	1	250	250	0	3	1
+2.5%-tile:	1	253	253	0	4	11660
+25%-tile:	1	253	253	0	4	116599
+Median: 	1	253	253	0	4	233198
+75%-tile:	1	253	253	0	5	349797
+97.5%-tile:	1	253	253	0	6	454736
+Maximum:	1	253	253	0	8	466395
+Mean:	1	252	252	0	4
+# of Seqs:	466395
+```
+This indicates that now we have 466395 sequences, so, 155963 were removed.
+
+When working when metabarcode sequences, always there are duplicates. Since it’s just too wasteful computationally speaking to align the same sequence every time, we’ll work only with unique files.
+
+```
+unique.seqs(fasta=Contigs/tutorial.trim.contigs.good.fasta, count=Contigs/tutorial.contigs.good.count_table)
+
+Output File Names: 
+Contigs/tutorial.trim.contigs.good.unique.fasta
+Contigs/tutorial.trim.contigs.good.count_table
 ```
 
 ```
-```
+summary.seqs(fasta=Contigs/tutorial.trim.contigs.good.unique.fasta, count=Contigs/tutorial.trim.contigs.good.count_table)
 
-```
-```
-
-```
+		Start	End	NBases	Ambigs	Polymer	NumSeqs
+Minimum:	1	250	250	0	3	1
+2.5%-tile:	1	253	253	0	4	11660
+25%-tile:	1	253	253	0	4	116599
+Median: 	1	253	253	0	4	233198
+75%-tile:	1	253	253	0	5	349797
+97.5%-tile:	1	253	253	0	6	454736
+Maximum:	1	253	253	0	8	466395
+Mean:	1	252	252	0	4
+# of unique seqs:	114887
+total # of seqs:	466395
 ```
 ```
 ```
