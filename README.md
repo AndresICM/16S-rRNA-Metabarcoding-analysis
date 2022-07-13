@@ -30,5 +30,14 @@ tar -xf Demultiplexed.tar.xz
 ```
 A folder called Demultiplexed should be created. Let's inspect what's inside
 
+```
+ls Demultiplexed
+
+BA3T01-R1.fastq  BA3T07-R1.fastq  LF2T11-R1.fastq  LF3T03-R1.fastq
+BA3T01-R2.fastq  BA3T07-R2.fastq  LF2T11-R2.fastq  LF3T03-R2.fastq
+BA3T03-R1.fastq  BA3T11-R1.fastq  LF3T01-R1.fastq  LF3T07-R1.fastq
+BA3T03-R2.fastq  BA3T11-R2.fastq  LF3T01-R2.fastq  LF3T07-R2.fastq
+```
+Sixteen files are part of this tutorial. BA stands for Bioaugmentation and LF to landfarming, which was the control treatment. Then Txx indicate the time of sampling. T01 is the initial point, T03, T07 and T11 are at the 2nd, 6th and 10th week respectively. The after the - appears a R1 or R2, which correspond to the forward and reverse reads of a sample. 
 
 
