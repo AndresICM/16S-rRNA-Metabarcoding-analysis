@@ -21,7 +21,7 @@ cd 16S_tutorial
 Then we will download the data using wget
 
 ```
-wget https://zenodo.org/record/6828213/files/Demultiplexed.tar.xz
+wget https://sandbox.zenodo.org/record/1083578/files/Demultiplexed.tar.xz
 ```
 Finally, we will extract the downloaded file
 
@@ -312,21 +312,92 @@ Now that our sequences are classified, we can remove the undesired ones
 remove.lineage(fasta=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.pick.fasta, count=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.count_table, taxonomy=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.pick.nr_v138_1.wang.taxonomy, taxon=Chloroplast-Mitochondria-unknown-Archaea-Eukaryota)
 ```
 ## Classify sequences into OTUs
-Operational Taxonomic Units (OTUs) 
+There are two main strategies to group sequences using taxonomic information. Operational Taxonomic Units (OTUs) represent sequences that are not more than 3% different from each other. However, there is another to group them into Amplicon Sequence Variants (ASVs), which differentiate sequences with one or two bases apart, to have more accurate classifications. 
+
+Since 16S rRNA fragments are not enough to differentiate bacterial species, we consider that the OTU-based approach is good enough to classify sequences. For that, we will use the cluster.split command, which uses the taxonomic information to split the original file into smaller pieces at the class level (taxlevel=4) with a cutoff of 1%. Additionally, we will use just 1 processor for this process. 
 
 ```
-
+cluster.split(fasta=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.fasta, count=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.pick.count_table, taxonomy=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.pick.nr_v138_1.wang.pick.taxonomy, taxlevel=4, cutoff=0.03, processors=1, method=average)
 ```
 
-```
-```
+To know how many sequences we have in each OTU, we can use the make.shared command
 
 ```
+make.shared(list=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.an.list, count=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.pick.count_table)
 ```
+Now we can classify our OTUs
 
 ```
+classify.otu(list=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.an.list, count=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.pick.count_table, taxonomy=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.pick.nr_v138_1.wang.pick.taxonomy, label=0.01) 
 ```
+Let's inspect the output file with less
 
 ```
+less Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.an.0.01.cons.taxonomy
+
+OTU     Size    Taxonomy
+Otu00001        32164   Bacteria(100);Proteobacteria(100);Gammaproteobacteria(100);Pseudomonadales(100);Moraxellaceae(100);Acinetobacter(100);
+Otu00002        29155   Bacteria(100);Proteobacteria(100);Gammaproteobacteria(100);Xanthomonadales(100);Xanthomonadaceae(100);Thermomonas(100);
+Otu00003        27548   Bacteria(100);Proteobacteria(100);Gammaproteobacteria(100);Xanthomonadales(100);Xanthomonadaceae(100);Pseudoxanthomonas(100);
+Otu00004        23968   Bacteria(100);Actinobacteriota(100);Actinobacteria(100);Corynebacteriales(100);Nocardiaceae(100);Rhodococcus(100);
+Otu00005        12703   Bacteria(100);Actinobacteriota(100);Actinobacteria(100);Propionibacteriales(100);Nocardioidaceae(100);Nocardioides(100);
+.
+.
+.
 ```
+This tells us that the Otu00004 have 23968 sequences and that 100% of them are classified as *Rhodococcus*
+
+Now, we have some files with pretty large names, so we can rename them
+
+
+```
+rename.file(taxonomy=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.an.0.01.cons.taxonomy, shared=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.an.shared) 
+
+Current files saved by mothur:
+accnos=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.pick.nr_v138_1.wang.accnos
+fasta=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.fasta
+list=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.an.list
+shared=Contigs/tutorial.an.shared
+taxonomy=Contigs/tutorial.taxonomy
+constaxonomy=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.an.0.01.cons.taxonomy
+count=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.pick.count_table
+```
+
+## Final touches 
+We now have our OTUs classified and ready to be analysed using other tools such as phyloseq. By the meantime, we can obtain some other information.
+
+first we can count how many final sequences we have in each sample
+
+```
+count.groups(shared=Contigs/tutorial.an.shared)
+
+Group_0 contains 48510.
+Group_1 contains 63938.
+Group_2 contains 49670.
+Group_3 contains 59265.
+Group_4 contains 49023.
+Group_5 contains 51831.
+Group_6 contains 58400.
+Group_7 contains 61218.
+
+Size of smallest group: 48510.
+
+Total seqs: 441855.
+
+Output File Names: 
+Contigs/tutorial.an.count.summary
+```
+
+Finally, we can obtain some rarefaction files, which will help us later to observe if the depth of sequencing was enough to observe the whole diversity of our samples
+
+```
+rarefaction.single(shared=Contigs/tutorial.an.shared, calc=sobs, freq=100)
+
+It took 57 secs to run rarefaction.single.
+
+Output File Names: 
+Contigs/tutorial.an.groups.rarefaction
+```
+
+Now we have all of our files to make some further figures and inspect the diversity of the bacterial communities in our bioremediation samples
 
