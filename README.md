@@ -11,10 +11,20 @@ The fundamental question of the experiment was observe the bacterial communities
 
 ##Download Raw Data
 
-The data is publicly available in Zenodo. To download it we will create first a folder 
+The data is publicly available in Zenodo. To download it we will create first a folder called 16S_tutorial and enter into that folder with cd
 
 ```
-
 mkdir 16S_tutorial
 cd 16S_tutorial
+```
+
+Then we will download the data using wget
+
+```
+wget https://zenodo.org/record/6828213/files/Demultiplexed.tar.xz
+```
+Finally we will extract the downloaded file
+
+```
+tar -xf
 ```
