@@ -202,7 +202,7 @@ rename.file(input=Contigs/silva.nr_v138_1.pcr.align, new=silva.v4.fasta)
 ```
 ## Working with Improved Sequences and a Customized Database
 
-Now that we have our improved reads and a customized database, we can align sequences to the reference. This process takes a few minutes
+Now that we have improved reads and a customized database, we can align sequences to the reference. This process takes a few minutes
 
 ```
 align.seqs(fasta=Contigs/tutorial.trim.contigs.good.unique.fasta, reference=Contigs/silva.v4.fasta, processors=1, flip=t)
@@ -223,7 +223,7 @@ Mean:	1973	11554	252	0	4
 # of unique seqs:	114887
 total # of seqs:	466395
 ```
-We can observe that most of our sequences align between the 1973 and 11555 possition of the reference. Now we can remove the alignments that does not overlap in this region
+We can observe that most of our sequences align between the 1973 and 11555 position of the reference. Now we can remove the alignments that do not overlap in this region
 
 ```
 screen.seqs(fasta=Contigs/tutorial.trim.contigs.good.unique.align, count=Contigs/tutorial.trim.contigs.good.count_table, start=1973, end=11555, processors=4)
@@ -255,33 +255,69 @@ Length of the original alignment: 13434
 Number of sequences used to construct filter: 114514
 ```
 So we went from an alignment file with 13434 columns to one of 623. 
-Now, we might still have some redundant sequences, therefore we will re run the unique.seqs command
+Now, we might still have some redundant sequences, therefore we will re-run the unique.seqs command
 
 ```
 unique.seqs(fasta=Contigs/tutorial.trim.contigs.good.unique.good.filter.fasta, count=Contigs/tutorial.trim.contigs.good.good.count_table)
 ```
-
-
-
-```
-```
+There were no additional duplicate sequences in our dataset, still, it is good to use that command to check.
+Now what we want to do is to pre-cluster our sequences using the pre.cluster command. We will set it to group sequences with up to two nucleotides of difference between them and then merge them. This command requires a larger amount of ram, so we will use only two processors
 
 ```
+pre.cluster(fasta=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.fasta, count=Contigs/tutorial.trim.contigs.good.unique.good.filter.count_table, diffs=2, processors=2)
+```
+
+Now we have to find and remove chimeras (sequences incorrectly joined together). This is accomplished using vsearch 
+
+```
+chimera.vsearch(fasta=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.fasta, count=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.count_table, dereplicate=t)
+
+Output File Names:
+Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.count_table
+Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.chimeras
+Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.accnos
+Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.fasta
+```
+To remove the chimeric sequences from our fasta we can use the .accnos file
+
+```
+remove.seqs(fasta=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.fasta, accnos=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.accnos)
+```
+14678 sequences were removed from our file. Let's inspect how our sequences look now
+
+```
+summary.seqs(fasta=current, count=current)
+
+             	Start	End	NBases	Ambigs	Polymer	NumSeqs
+Minimum:	1	622	228	0	3	1
+2.5%-tile:	1	623	253	0	4	11078
+25%-tile:	1	623	253	0	4	110778
+Median: 	1	623	253	0	4	221555
+75%-tile:	1	623	253	0	5	332332
+97.5%-tile:	1	623	253	0	6	432031
+Maximum:	1	623	253	0	8	443108
+Mean:	1	622	252	0	4
+# of unique seqs:	24405
+total # of seqs:	443108
+```
+After all this denoising, we have 443108 sequences, and only 24405 unique ones, which makes it a lot easier to work with.
+Now, we have to remove some undesired sequences from our data, such as fragments or 16S rRNA from Archaea, chloroplasts, and mitochondria. The primers used for this study are meant for bacterial communities, so we need to get rid of everything else. To identify this sequences, we need to classify them using the reference SILVA database
+
+```
+classify.seqs(fasta=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.pick.fasta, count=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.count_table, reference=Contigs/silva.v4.fasta, taxonomy=Silva_DB/silva.nr_v138_1.tax, cutoff=80, processors=2)
+```
+Now that our sequences are classified, we can remove the undesired ones
+
+```
+remove.lineage(fasta=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.pick.fasta, count=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.count_table, taxonomy=Contigs/tutorial.trim.contigs.good.unique.good.filter.unique.precluster.pick.nr_v138_1.wang.taxonomy, taxon=Chloroplast-Mitochondria-unknown-Archaea-Eukaryota)
+```
+## Classify sequences into OTUs
+Operational Taxonomic Units (OTUs) 
+
 ```
 
 ```
-```
-```
-```
 
-```
-```
-
-```
-```
-
-```
-```
 ```
 ```
 
