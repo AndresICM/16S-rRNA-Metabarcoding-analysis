@@ -13,8 +13,8 @@ The fundamental question of the experiment was observe the bacterial communities
 
 The data is publicly available in Zenodo. To download it we will create first a folder 
 
-,,,
+```
 
 mkdir 16S_tutorial
 cd 16S_tutorial
-,,,
+```
