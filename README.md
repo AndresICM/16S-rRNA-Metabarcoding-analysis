@@ -1,4 +1,5 @@
 # 16S-rRNA-Metabarcoding-Analysis
+## Raw Reads Analysis Using Mothur
 Tutorial for the analysis of 16S rRNA metabarcoding sequences using Illumina paired end reads. This tutorial is based on the MiSeq SOP pipeline (https://mothur.org/wiki/miseq_sop/ Schloss et al., 2013.)
 
 ## Introduction
